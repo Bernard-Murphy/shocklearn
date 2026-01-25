@@ -32,7 +32,7 @@ export class EnrollmentsController {
   }
 
   @Get('courses/:courseId/list')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   getCourseEnrollments(@Param('courseId') courseId: string) {
     return this.enrollmentsService.findByCourse(courseId);
   }

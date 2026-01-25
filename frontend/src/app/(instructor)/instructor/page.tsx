@@ -25,7 +25,7 @@ export default function InstructorDashboard() {
     if (!authLoading) {
       if (!user) {
         router.push('/login');
-      } else if (user.role !== UserRole.INSTRUCTOR && user.role !== UserRole.ADMIN) {
+      } else if (user.role !== UserRole.USER && user.role !== UserRole.ADMIN) {
         router.push('/dashboard');
       } else {
         loadCourses();

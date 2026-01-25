@@ -21,7 +21,7 @@ export class ModulesController {
   constructor(private readonly modulesService: ModulesService) {}
 
   @Post('courses/:courseId/modules')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   create(
     @Param('courseId') courseId: string,
     @CurrentUser() user: User,
@@ -41,7 +41,7 @@ export class ModulesController {
   }
 
   @Put('modules/:id')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   update(
     @Param('id') id: string,
     @CurrentUser() user: User,
@@ -51,7 +51,7 @@ export class ModulesController {
   }
 
   @Delete('modules/:id')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   async remove(@Param('id') id: string, @CurrentUser() user: User) {
     await this.modulesService.remove(id, user.id);
     return { message: 'Module deleted successfully' };

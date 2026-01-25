@@ -12,7 +12,7 @@ export class AIAgentsController {
   constructor(private readonly orchestrator: AIAgentOrchestratorService) {}
 
   @Post('generate-curriculum')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   async generateCurriculum(
     @CurrentUser() user: User,
     @Body() input: GenerateCurriculumDto,
@@ -26,7 +26,7 @@ export class AIAgentsController {
   }
 
   @Post('generate-quiz')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   async generateQuiz(@CurrentUser() user: User, @Body() input: GenerateQuizDto) {
     const result = await this.orchestrator.generateQuiz(user.id, input);
     return {

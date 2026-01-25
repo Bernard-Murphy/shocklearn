@@ -19,7 +19,7 @@ export default function RegisterPage() {
     password: '',
     firstName: '',
     lastName: '',
-    role: UserRole.LEARNER,
+    role: UserRole.USER,
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -92,18 +92,6 @@ export default function RegisterPage() {
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="role">I want to</Label>
-              <select
-                id="role"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
-              >
-                <option value={UserRole.LEARNER}>Learn (Student)</option>
-                <option value={UserRole.INSTRUCTOR}>Teach (Instructor)</option>
-              </select>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">

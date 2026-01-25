@@ -23,7 +23,7 @@ export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Post()
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   create(@CurrentUser() user: User, @Body() createCourseDto: CreateCourseDto) {
     return this.coursesService.create(user.id, createCourseDto);
   }
@@ -57,7 +57,7 @@ export class CoursesController {
   }
 
   @Put(':id')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   update(
     @Param('id') id: string,
     @CurrentUser() user: User,
@@ -67,25 +67,25 @@ export class CoursesController {
   }
 
   @Post(':id/publish')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   publish(@Param('id') id: string, @CurrentUser() user: User) {
     return this.coursesService.publish(id, user.id);
   }
 
   @Delete(':id')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   async remove(@Param('id') id: string, @CurrentUser() user: User) {
     await this.coursesService.remove(id, user.id);
     return { message: 'Course deleted successfully' };
   }
 
   @Get(':id/analytics')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   async getCourseAnalytics(@Param('id') id: string, @CurrentUser() user: User) {
     const course = await this.coursesService.findOne(id);
     
-    // Check ownership for instructors
-    if (user.role === UserRole.INSTRUCTOR && course.instructorId !== user.id) {
+    // Check ownership for course creators
+    if (user.role === UserRole.USER && course.instructorId !== user.id) {
       throw new ForbiddenException('You can only view analytics for your own courses');
     }
     

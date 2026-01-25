@@ -21,7 +21,7 @@ export class LessonsController {
   constructor(private readonly lessonsService: LessonsService) {}
 
   @Post('modules/:moduleId/lessons')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   create(
     @Param('moduleId') moduleId: string,
     @CurrentUser() user: User,
@@ -41,7 +41,7 @@ export class LessonsController {
   }
 
   @Put('lessons/:id')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   update(
     @Param('id') id: string,
     @CurrentUser() user: User,
@@ -51,7 +51,7 @@ export class LessonsController {
   }
 
   @Delete('lessons/:id')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   async remove(@Param('id') id: string, @CurrentUser() user: User) {
     await this.lessonsService.remove(id, user.id);
     return { message: 'Lesson deleted successfully' };
@@ -59,7 +59,7 @@ export class LessonsController {
 
   // Quiz endpoints
   @Post('lessons/:lessonId/quizzes')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   createQuiz(
     @Param('lessonId') lessonId: string,
     @CurrentUser() user: User,
@@ -79,7 +79,7 @@ export class LessonsController {
   }
 
   @Put('quizzes/:id')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   updateQuiz(
     @Param('id') id: string,
     @CurrentUser() user: User,
@@ -89,7 +89,7 @@ export class LessonsController {
   }
 
   @Delete('quizzes/:id')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   async deleteQuiz(@Param('id') id: string, @CurrentUser() user: User) {
     await this.lessonsService.deleteQuiz(id, user.id);
     return { message: 'Quiz deleted successfully' };

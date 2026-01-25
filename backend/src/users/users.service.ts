@@ -68,10 +68,9 @@ export class UsersService {
   async getUserStats(): Promise<UserStatsDto> {
     const totalUsers = await this.usersRepository.count();
 
-    const [adminCount, instructorCount, learnerCount] = await Promise.all([
+    const [adminCount, userCount] = await Promise.all([
       this.usersRepository.count({ where: { role: UserRole.ADMIN } }),
-      this.usersRepository.count({ where: { role: UserRole.INSTRUCTOR } }),
-      this.usersRepository.count({ where: { role: UserRole.LEARNER } }),
+      this.usersRepository.count({ where: { role: UserRole.USER } }),
     ]);
 
     const recentUsers = await this.usersRepository.find({
@@ -90,8 +89,7 @@ export class UsersService {
       totalUsers,
       usersByRole: {
         admin: adminCount,
-        instructor: instructorCount,
-        learner: learnerCount,
+        user: userCount,
       },
       recentUsers: recentUsers.map((u) => ({
         id: u.id,

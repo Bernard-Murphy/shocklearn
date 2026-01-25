@@ -1,7 +1,10 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAuth } from '@/lib/auth-context';
+import { UserRole } from '@edtech/shared';
 import { Button } from '@/components/ui/button';
 import { LayoutDashboard, Users } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -10,6 +13,23 @@ import { fade_out, normalize, transition_fast, fade_out_scale_1 } from '@/lib/tr
 import { PageTransition } from '@/components/ui/page-transition';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (!user) {
+        router.push('/login');
+      } else if (user.role !== UserRole.ADMIN) {
+        router.push('/dashboard');
+      }
+    }
+  }, [user, isLoading, router]);
+
+  if (isLoading || !user || user.role !== UserRole.ADMIN) {
+    return null;
+  }
+
   return (
     <AnimatePresence mode="wait">
       <motion.div

@@ -1,8 +1,7 @@
 // User Types
 export enum UserRole {
   ADMIN = 'admin',
-  INSTRUCTOR = 'instructor',
-  LEARNER = 'learner',
+  USER = 'user',
 }
 
 export interface User {
@@ -366,8 +365,7 @@ export interface UserStatsDto {
   totalUsers: number;
   usersByRole: {
     admin: number;
-    instructor: number;
-    learner: number;
+    user: number;
   };
   recentUsers: User[];
   activeUsersLast30Days: number;

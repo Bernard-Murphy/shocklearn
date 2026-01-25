@@ -115,12 +115,8 @@ export default function AdminDashboardPage() {
                     <span className="font-medium">{userStats.usersByRole.admin}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm">Instructors</span>
-                    <span className="font-medium">{userStats.usersByRole.instructor}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm">Learners</span>
-                    <span className="font-medium">{userStats.usersByRole.learner}</span>
+                    <span className="text-sm">Users</span>
+                    <span className="font-medium">{userStats.usersByRole.user}</span>
                   </div>
                 </div>
               </CardContent>

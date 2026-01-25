@@ -35,7 +35,7 @@ describe('AuthController (e2e)', () => {
           password: 'TestPassword123!',
           firstName: 'Test',
           lastName: 'User',
-          role: 'learner',
+          role: 'user',
         })
         .expect(201)
         .expect((res) => {
@@ -53,7 +53,7 @@ describe('AuthController (e2e)', () => {
           password: 'TestPassword123!',
           firstName: 'Test',
           lastName: 'User',
-          role: 'learner',
+          role: 'user',
         })
         .expect(400);
     });

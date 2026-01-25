@@ -29,7 +29,7 @@ export default function InstructorLayout({
       if (!user) {
         router.push('/login');
 
-      } else if (user.role !== UserRole.INSTRUCTOR && user.role !== UserRole.ADMIN) {
+      } else if (user.role !== UserRole.USER && user.role !== UserRole.ADMIN) {
         router.push('/dashboard');
       }
     }
@@ -97,6 +97,17 @@ export default function InstructorLayout({
                   <Button variant="ghost" className="w-full justify-start">
                     <BarChart3 className="mr-2 h-4 w-4" />
                     Analytics
+                  </Button>
+                </Link>
+              </BouncyClick>
+
+              <Separator className="my-2" />
+              
+              <BouncyClick>
+                <Link href="/dashboard">
+                  <Button variant="ghost" className="w-full justify-start text-muted-foreground">
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Switch to Learning
                   </Button>
                 </Link>
               </BouncyClick>

@@ -12,19 +12,19 @@ export class ContentVersioningController {
   constructor(private readonly versioningService: ContentVersioningService) {}
 
   @Get('lessons/:id/versions')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   findByLesson(@Param('id') lessonId: string) {
     return this.versioningService.findByLesson(lessonId);
   }
 
   @Post('content-versions/:id/approve')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   approve(@Param('id') id: string, @CurrentUser() user: User) {
     return this.versioningService.approve(id, user.id);
   }
 
   @Post('content-versions/:id/reject')
-  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   reject(@Param('id') id: string) {
     return this.versioningService.reject(id);
   }
