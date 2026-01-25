@@ -288,3 +288,121 @@ export interface ErrorResponse {
   path: string;
 }
 
+// Quiz DTOs
+export interface CreateQuizDto {
+  title: string;
+  questions: QuizQuestion[];
+  passingScore: number;
+}
+
+export interface UpdateQuizDto {
+  title?: string;
+  questions?: QuizQuestion[];
+  passingScore?: number;
+}
+
+export interface SubmitQuizDto {
+  answers: Record<string, string>;
+}
+
+export interface QuizResultDto {
+  score: number;
+  correctAnswers: number;
+  totalQuestions: number;
+  passed: boolean;
+  answers: Record<string, string>;
+  correctAnswersMap: Record<string, string | string[]>;
+  attemptId: string;
+}
+
+// Analytics DTOs
+export interface CourseAnalyticsDto {
+  courseId: string;
+  enrollmentCount: number;
+  activeStudents: number;
+  completionRate: number;
+  averageProgress: number;
+  totalTimeSpent: number;
+  averageTimePerLesson: {
+    lessonId: string;
+    lessonTitle: string;
+    averageSeconds: number;
+  }[];
+  quizPerformance: {
+    quizId: string;
+    quizTitle: string;
+    averageScore: number;
+    passRate: number;
+    attempts: number;
+  }[];
+}
+
+export interface EnrollmentProgressDto {
+  enrollmentId: string;
+  courseId: string;
+  userId: string;
+  status: EnrollmentStatus;
+  progressPercentage: number;
+  completedLessons: number;
+  totalLessons: number;
+  lessonsProgress: {
+    lessonId: string;
+    lessonTitle: string;
+    status: LessonProgressStatus;
+    timeSpentSeconds: number;
+    completedAt?: Date;
+  }[];
+  quizAttempts: {
+    quizId: string;
+    quizTitle: string;
+    score: number;
+    passed: boolean;
+    attemptedAt: Date;
+  }[];
+}
+
+// Admin DTOs
+export interface UserStatsDto {
+  totalUsers: number;
+  usersByRole: {
+    admin: number;
+    instructor: number;
+    learner: number;
+  };
+  recentUsers: User[];
+  activeUsersLast30Days: number;
+}
+
+export interface CourseStatsDto {
+  totalCourses: number;
+  coursesByStatus: {
+    draft: number;
+    published: number;
+    archived: number;
+  };
+  totalEnrollments: number;
+  averageEnrollmentsPerCourse: number;
+  mostPopularCourses: {
+    courseId: string;
+    title: string;
+    enrollmentCount: number;
+  }[];
+}
+
+// Module and Lesson with relations DTOs
+export interface ModuleWithLessonsDto extends CourseModule {
+  lessons: Lesson[];
+}
+
+export interface CourseWithModulesDto extends Course {
+  modules: ModuleWithLessonsDto[];
+  instructor?: User;
+  enrollmentCount?: number;
+}
+
+// Content Version DTOs
+export interface PendingVersionDto extends ContentVersion {
+  lesson: Lesson;
+  author: User;
+}
+

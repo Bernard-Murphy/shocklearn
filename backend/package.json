@@ -1,7 +1,7 @@
 {
   "name": "@edtech/backend",
   "version": "1.0.0",
-  "description": "NestJS backend for EdTech LMS",
+  "description": "NestJS backend for ShockLearn LMS",
   "private": true,
   "scripts": {
     "build": "nest build",

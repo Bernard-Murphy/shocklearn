@@ -149,6 +149,141 @@ export class ApiClient {
   async getRecommendations(enrollmentId: string) {
     return this.get<any>(`/ai-agents/recommendations?enrollmentId=${enrollmentId}`);
   }
+
+  // Quizzes
+  async createQuiz(lessonId: string, quizData: any) {
+    return this.post<any>(`/lessons/${lessonId}/quizzes`, quizData);
+  }
+
+  async getQuizzesByLesson(lessonId: string) {
+    return this.get<any>(`/lessons/${lessonId}/quizzes`);
+  }
+
+  async getQuiz(quizId: string) {
+    return this.get<any>(`/quizzes/${quizId}`);
+  }
+
+  async updateQuiz(quizId: string, quizData: any) {
+    return this.put<any>(`/quizzes/${quizId}`, quizData);
+  }
+
+  async deleteQuiz(quizId: string) {
+    return this.delete<any>(`/quizzes/${quizId}`);
+  }
+
+  async submitQuiz(quizId: string, answers: Record<string, string>) {
+    return this.post<any>(`/quizzes/${quizId}/submit`, { answers });
+  }
+
+  async getQuizAttempts(quizId: string) {
+    return this.get<any>(`/quizzes/${quizId}/attempts`);
+  }
+
+  async getMyQuizAttempts() {
+    return this.get<any>('/users/me/quiz-attempts');
+  }
+
+  // Modules
+  async getModulesByCourse(courseId: string) {
+    return this.get<any>(`/courses/${courseId}/modules`);
+  }
+
+  async getModule(moduleId: string) {
+    return this.get<any>(`/modules/${moduleId}`);
+  }
+
+  async createModule(courseId: string, moduleData: any) {
+    return this.post<any>(`/courses/${courseId}/modules`, moduleData);
+  }
+
+  async updateModule(moduleId: string, moduleData: any) {
+    return this.put<any>(`/modules/${moduleId}`, moduleData);
+  }
+
+  async deleteModule(moduleId: string) {
+    return this.delete<any>(`/modules/${moduleId}`);
+  }
+
+  // Lessons
+  async getLessonsByModule(moduleId: string) {
+    return this.get<any>(`/modules/${moduleId}/lessons`);
+  }
+
+  async getLesson(lessonId: string) {
+    return this.get<any>(`/lessons/${lessonId}`);
+  }
+
+  async createLesson(moduleId: string, lessonData: any) {
+    return this.post<any>(`/modules/${moduleId}/lessons`, lessonData);
+  }
+
+  async updateLesson(lessonId: string, lessonData: any) {
+    return this.put<any>(`/lessons/${lessonId}`, lessonData);
+  }
+
+  async deleteLesson(lessonId: string) {
+    return this.delete<any>(`/lessons/${lessonId}`);
+  }
+
+  // Progress
+  async updateLessonProgress(lessonId: string, enrollmentId: string, status: string, timeSpentSeconds?: number) {
+    return this.put<any>(`/lessons/${lessonId}/progress`, {
+      enrollmentId,
+      status,
+      timeSpentSeconds,
+    });
+  }
+
+  // Analytics
+  async getCourseAnalytics(courseId: string) {
+    return this.get<any>(`/courses/${courseId}/analytics`);
+  }
+
+  async getEnrollmentProgress(enrollmentId: string) {
+    return this.get<any>(`/enrollments/${enrollmentId}/progress-details`);
+  }
+
+  async getCourseEnrollments(courseId: string) {
+    return this.get<any>(`/enrollments/courses/${courseId}/list`);
+  }
+
+  // Admin
+  async getUserStats() {
+    return this.get<any>('/users/stats/overview');
+  }
+
+  async getCourseStats() {
+    return this.get<any>('/courses/stats/overview');
+  }
+
+  async getAllUsers() {
+    return this.get<any>('/users');
+  }
+
+  async getUser(userId: string) {
+    return this.get<any>(`/users/${userId}`);
+  }
+
+  async deleteUser(userId: string) {
+    return this.delete<any>(`/users/${userId}`);
+  }
+
+  async updateUser(userId: string, data: any) {
+    return this.put<any>(`/users/${userId}`, data);
+  }
+
+  // Content Versioning
+  async getLessonVersions(lessonId: string) {
+    return this.get<any>(`/lessons/${lessonId}/versions`);
+  }
+
+  async approveVersion(versionId: string) {
+    return this.post<any>(`/content-versions/${versionId}/approve`);
+  }
+
+  async rejectVersion(versionId: string) {
+    return this.post<any>(`/content-versions/${versionId}/reject`);
+  }
 }
 
 export const apiClient = new ApiClient();

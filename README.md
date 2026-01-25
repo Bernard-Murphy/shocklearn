@@ -1,4 +1,4 @@
-# EdTech LMS Platform
+# ShockLearn LMS Platform
 
 A production-quality Learning Management System with AI-powered curriculum generation, built with NestJS, Next.js, PostgreSQL, and modern TypeScript practices.
 

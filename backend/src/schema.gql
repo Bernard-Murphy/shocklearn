@@ -2,6 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type CourseAnalyticsOutput {
+  activeStudents: Int!
+  averageProgress: Int!
+  averageTimePerLesson: [LessonTimeMetric!]!
+  completionRate: Int!
+  courseId: ID!
+  enrollmentCount: Int!
+  quizPerformance: [QuizPerformanceMetric!]!
+  totalTimeSpent: Int!
+}
+
 type CourseDetailOutput {
   description: String!
   id: String!
@@ -9,11 +20,42 @@ type CourseDetailOutput {
   title: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type EnrollmentProgressOutput {
+  completedLessons: Int!
+  courseId: ID!
+  enrollmentId: ID!
+  lessonsProgress: [LessonProgressItem!]!
+  progressPercentage: Int!
+  quizAttempts: [QuizAttemptItem!]!
+  status: String!
+  totalLessons: Int!
+  userId: ID!
+}
+
 type LessonOutput {
   content: String!
   id: String!
   orderIndex: Int!
   title: String!
+}
+
+type LessonProgressItem {
+  completedAt: DateTime
+  lessonId: ID!
+  lessonTitle: String!
+  status: String!
+  timeSpentSeconds: Int!
+}
+
+type LessonTimeMetric {
+  averageSeconds: Int!
+  lessonId: ID!
+  lessonTitle: String!
 }
 
 type ModuleOutput {
@@ -24,4 +66,22 @@ type ModuleOutput {
 
 type Query {
   courseWithFullStructure(id: ID!): CourseDetailOutput!
+  enrollmentProgress(enrollmentId: ID!): EnrollmentProgressOutput!
+  instructorAnalytics(courseId: ID!): CourseAnalyticsOutput!
+}
+
+type QuizAttemptItem {
+  attemptedAt: DateTime!
+  passed: Boolean!
+  quizId: ID!
+  quizTitle: String!
+  score: Int!
+}
+
+type QuizPerformanceMetric {
+  attempts: Int!
+  averageScore: Int!
+  passRate: Int!
+  quizId: ID!
+  quizTitle: String!
 }

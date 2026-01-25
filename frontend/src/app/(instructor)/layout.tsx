@@ -27,7 +27,8 @@ export default function InstructorLayout({
         router.push('/dashboard');
       }
     }
-  }, [user, isLoading, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, isLoading]);
 
   async function handleLogout() {
     await logout();
@@ -43,7 +44,7 @@ export default function InstructorLayout({
       <aside className="w-64 border-r bg-card p-6 space-y-6">
         <div className="flex items-center space-x-2">
           <BookOpen className="h-6 w-6" />
-          <span className="font-bold text-lg">EdTech LMS</span>
+          <span className="font-bold text-lg">ShockLearn LMS</span>
         </div>
 
         <Separator />

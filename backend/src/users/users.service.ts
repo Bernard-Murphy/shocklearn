@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, MoreThan } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
-import { RegisterDto } from '@edtech/shared';
+import { RegisterDto, UserStatsDto, UserRole } from '@edtech/shared';
 
 @Injectable()
 export class UsersService {
@@ -63,6 +63,47 @@ export class UsersService {
     if (result.affected === 0) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
+  }
+
+  async getUserStats(): Promise<UserStatsDto> {
+    const totalUsers = await this.usersRepository.count();
+
+    const [adminCount, instructorCount, learnerCount] = await Promise.all([
+      this.usersRepository.count({ where: { role: UserRole.ADMIN } }),
+      this.usersRepository.count({ where: { role: UserRole.INSTRUCTOR } }),
+      this.usersRepository.count({ where: { role: UserRole.LEARNER } }),
+    ]);
+
+    const recentUsers = await this.usersRepository.find({
+      order: { createdAt: 'DESC' },
+      take: 10,
+    });
+
+    // Active users in last 30 days (this is a simplified version)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const activeUsersLast30Days = await this.usersRepository.count({
+      where: { createdAt: MoreThan(thirtyDaysAgo) },
+    });
+
+    return {
+      totalUsers,
+      usersByRole: {
+        admin: adminCount,
+        instructor: instructorCount,
+        learner: learnerCount,
+      },
+      recentUsers: recentUsers.map((u) => ({
+        id: u.id,
+        email: u.email,
+        role: u.role,
+        firstName: u.firstName,
+        lastName: u.lastName,
+        createdAt: u.createdAt,
+        updatedAt: u.updatedAt,
+      })),
+      activeUsersLast30Days,
+    };
   }
 }
 

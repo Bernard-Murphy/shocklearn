@@ -32,9 +32,8 @@ export default function RegisterPage() {
       await register(formData);
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Registration failed');
-    } finally {
       setIsLoading(false);
+      setError(err.message || 'Registration failed');
     }
   }
 

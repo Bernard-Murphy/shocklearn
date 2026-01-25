@@ -1,11 +1,13 @@
 import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { EnrollmentsService } from './enrollments.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CurrentUser } from '../common/decorators';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles, CurrentUser } from '../common/decorators';
 import { User } from '../users/entities/user.entity';
+import { UserRole } from '@edtech/shared';
 
 @Controller('enrollments')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class EnrollmentsController {
   constructor(private readonly enrollmentsService: EnrollmentsService) {}
 
@@ -22,6 +24,17 @@ export class EnrollmentsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.enrollmentsService.findOne(id);
+  }
+
+  @Get(':id/progress-details')
+  getProgressDetails(@Param('id') id: string) {
+    return this.enrollmentsService.getEnrollmentProgress(id);
+  }
+
+  @Get('courses/:courseId/list')
+  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  getCourseEnrollments(@Param('courseId') courseId: string) {
+    return this.enrollmentsService.findByCourse(courseId);
   }
 }
 

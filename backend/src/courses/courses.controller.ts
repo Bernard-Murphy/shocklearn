@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -76,6 +77,25 @@ export class CoursesController {
   async remove(@Param('id') id: string, @CurrentUser() user: User) {
     await this.coursesService.remove(id, user.id);
     return { message: 'Course deleted successfully' };
+  }
+
+  @Get(':id/analytics')
+  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  async getCourseAnalytics(@Param('id') id: string, @CurrentUser() user: User) {
+    const course = await this.coursesService.findOne(id);
+    
+    // Check ownership for instructors
+    if (user.role === UserRole.INSTRUCTOR && course.instructorId !== user.id) {
+      throw new ForbiddenException('You can only view analytics for your own courses');
+    }
+    
+    return this.coursesService.getCourseAnalytics(id);
+  }
+
+  @Get('stats/overview')
+  @Roles(UserRole.ADMIN)
+  getCourseStats() {
+    return this.coursesService.getCourseStats();
   }
 }
 

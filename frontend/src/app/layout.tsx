@@ -6,7 +6,7 @@ import { PageTransition } from "@/components/ui/page-transition";
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'EdTech LMS',
+  title: 'ShockLearn LMS',
   description: 'AI-powered Learning Management System',
 };
 

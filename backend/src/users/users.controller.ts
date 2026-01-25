@@ -49,5 +49,11 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
+
+  @Get('stats/overview')
+  @Roles(UserRole.ADMIN)
+  getUserStats() {
+    return this.usersService.getUserStats();
+  }
 }
 
