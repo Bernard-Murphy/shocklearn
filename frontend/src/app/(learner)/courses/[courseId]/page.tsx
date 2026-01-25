@@ -12,6 +12,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { BookOpen, CheckCircle, Circle, Clock } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fade_out, normalize, transition_fast, fade_out_scale_1 } from '@/lib/transitions';
+import BouncyClick from '@/components/ui/bouncy-click';
 
 interface Lesson {
   id: string;
@@ -213,14 +214,16 @@ export default function CourseDetailPage() {
                               <h3 className="font-semibold text-lg">Enroll to Access Course Content</h3>
                               <p className="text-muted-foreground">Start learning by enrolling in this course</p>
                             </div>
-                            <Button
-                              onClick={async () => {
-                                await apiClient.enrollInCourse(courseId);
-                                await loadData();
-                              }}
-                            >
-                              Enroll Now
-                            </Button>
+                            <BouncyClick>
+                              <Button
+                                onClick={async () => {
+                                  await apiClient.enrollInCourse(courseId);
+                                  await loadData();
+                                }}
+                              >
+                                Enroll Now
+                              </Button>
+                            </BouncyClick>
                           </CardContent>
                         </Card>
                       </motion.div>

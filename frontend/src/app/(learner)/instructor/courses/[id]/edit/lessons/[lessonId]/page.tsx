@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
@@ -13,9 +13,8 @@ import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import ReactMarkdown from 'react-markdown';
 
-export default function LessonEditPage({ params }: { params: Promise<{ id: string, lessonId: string }> }) {
-  const resolvedParams = use(params);
-  const { id: courseId, lessonId } = resolvedParams;
+export default function LessonEditPage({ params }: { params: { id: string, lessonId: string } }) {
+  const { id: courseId, lessonId } = params;
   const router = useRouter();
   
   const [lesson, setLesson] = useState<any>(null);

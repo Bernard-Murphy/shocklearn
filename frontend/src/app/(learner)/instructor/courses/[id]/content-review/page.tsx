@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
@@ -12,9 +12,8 @@ import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-export default function ContentReviewPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
-  const courseId = resolvedParams.id;
+export default function ContentReviewPage({ params }: { params: { id: string } }) {
+  const courseId = params.id;
   const router = useRouter();
   
   const [pendingVersions, setPendingVersions] = useState<any[]>([]);

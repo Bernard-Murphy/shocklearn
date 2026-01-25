@@ -146,6 +146,14 @@ export class ApiClient {
     return this.post<any>('/ai-agents/generate-quiz', data);
   }
 
+  async applyCurriculum(data: { courseId: string; curriculum: any }) {
+    return this.post<any>('/ai-agents/apply-curriculum', data);
+  }
+
+  async applyQuiz(data: { lessonId: string; quiz: any }) {
+    return this.post<any>('/ai-agents/apply-quiz', data);
+  }
+
   async getRecommendations(enrollmentId: string) {
     return this.get<any>(`/ai-agents/recommendations?enrollmentId=${enrollmentId}`);
   }

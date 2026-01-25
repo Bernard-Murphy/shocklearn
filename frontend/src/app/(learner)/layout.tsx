@@ -1,25 +1,28 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
-import { BookOpen, Home, LogOut, Sparkles } from 'lucide-react';
+import { BookOpen, Home, LogOut, Sparkles, Plus } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { UserRole } from '@edtech/shared';
 import BouncyClick from '@/components/ui/bouncy-click';
 import Spinner from '@/components/ui/spinner';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fade_out, normalize, transition_fast, fade_out_scale_1 } from '@/lib/transitions';
-
+import { cn } from '@/lib/utils';
 import { PageTransition } from '@/components/ui/page-transition';
+import { CreateCourseDialog } from '@/components/instructor/create-course-dialog';
 
 function LearnerShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, isLoading, logout } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -59,18 +62,18 @@ function LearnerShell({ children }: { children: React.ReactNode }) {
           exit={fade_out_scale_1}
           transition={transition_fast}
         >
-          <aside className="w-64 border-r bg-card p-6 space-y-6">
-            <div className="flex items-center space-x-2">
+          <aside className="w-64 border-r bg-card p-6 flex flex-col ">
+            <div className="flex items-center space-x-2 mb-6">
               <BookOpen className="h-6 w-6" />
               <span className="font-bold text-lg">ShockLearn LMS</span>
             </div>
 
-            <Separator />
+            <Separator className="mb-6" />
 
-            <nav className="space-y-2">
+            <nav className="space-y-2 flex-1">
               <BouncyClick>
                 <Link href="/dashboard">
-                  <Button variant="ghost" className="w-full justify-start">
+                  <Button variant="ghost" className={cn("w-full justify-start", pathname === '/dashboard' ? 'bg-accent text-accent-foreground' : '')}>
                     <Home className="mr-2 h-4 w-4" />
                     Dashboard
                   </Button>
@@ -78,29 +81,23 @@ function LearnerShell({ children }: { children: React.ReactNode }) {
               </BouncyClick>
               <BouncyClick>
                 <Link href="/courses">
-                  <Button variant="ghost" className="w-full justify-start">
+                  <Button variant="ghost" className={cn("w-full justify-start", pathname === '/courses' ? 'bg-accent text-accent-foreground' : '')}>
                     <BookOpen className="mr-2 h-4 w-4" />
-                    My Courses
-                  </Button>
-                </Link>
-              </BouncyClick>
-
-              <Separator className="my-2" />
-
-              <BouncyClick>
-                <Link href="/dashboard">
-                  <Button variant="ghost" className="w-full justify-start text-muted-foreground">
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Teaching Dashboard
+                    Courses
                   </Button>
                 </Link>
               </BouncyClick>
             </nav>
 
-            <Separator />
+            <CreateCourseDialog
+              open={isCreateDialogOpen}
+              onOpenChange={setIsCreateDialogOpen}
+            />
 
-            <div className="space-y-2">
-              <div className="flex items-center space-x-3 px-3 py-2">
+            <Separator className="my-6" />
+
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 px-3 pb-2">
                 <Avatar>
                   <AvatarFallback>
                     {user.firstName[0]}
@@ -114,8 +111,9 @@ function LearnerShell({ children }: { children: React.ReactNode }) {
                   <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                 </div>
               </div>
+              <Separator className="my-6" />
               <BouncyClick>
-                <Button variant="ghost" className="w-full justify-start" onClick={handleLogout}>
+                <Button variant="destructive" className="w-full" onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </Button>
@@ -123,7 +121,7 @@ function LearnerShell({ children }: { children: React.ReactNode }) {
             </div>
           </aside>
 
-          <main className="flex-1">
+          <main className="flex-1 overflow-y-auto">
             <PageTransition>{children}</PageTransition>
           </main>
         </motion.div>}

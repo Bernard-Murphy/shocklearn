@@ -11,6 +11,7 @@ import { AIRequest } from './entities/ai-request.entity';
 import { AIResponse } from './entities/ai-response.entity';
 import { ContentVersioningModule } from '../content-versioning/content-versioning.module';
 import { LessonsModule } from '../lessons/lessons.module';
+import { ModulesModule } from '../modules/modules.module';
 import { ProgressModule } from '../progress/progress.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { ProgressModule } from '../progress/progress.module';
     ConfigModule,
     ContentVersioningModule,
     LessonsModule,
+    ModulesModule,
     ProgressModule,
   ],
   controllers: [AIAgentsController],

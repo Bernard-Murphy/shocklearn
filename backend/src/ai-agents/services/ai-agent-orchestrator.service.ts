@@ -7,14 +7,19 @@ import { CurriculumGeneratorAgent } from '../agents/curriculum-generator.agent';
 import { QuizGeneratorAgent } from '../agents/quiz-generator.agent';
 import { RecommendationAgent } from '../agents/recommendation.agent';
 import { ContentVersioningService } from '../../content-versioning/content-versioning.service';
+import { ModulesService } from '../../modules/modules.service';
+import { LessonsService } from '../../lessons/lessons.service';
 import {
   AgentType,
   AIRequestStatus,
   GenerateCurriculumDto,
   GenerateQuizDto,
+  ApplyCurriculumDto,
+  ApplyQuizDto,
   CurriculumOutput,
   QuizOutput,
   RecommendationOutput,
+  ContentType,
 } from '@edtech/shared';
 
 @Injectable()
@@ -28,6 +33,8 @@ export class AIAgentOrchestratorService {
     private quizAgent: QuizGeneratorAgent,
     private recommendationAgent: RecommendationAgent,
     private versioningService: ContentVersioningService,
+    private modulesService: ModulesService,
+    private lessonsService: LessonsService,
   ) {}
 
   async generateCurriculum(
@@ -129,6 +136,40 @@ export class AIAgentOrchestratorService {
       await this.requestsRepository.save(request);
       throw error;
     }
+  }
+
+  async applyCurriculum(userId: string, dto: ApplyCurriculumDto): Promise<void> {
+    const { courseId, curriculum } = dto;
+
+    for (let i = 0; i < curriculum.modules.length; i++) {
+      const moduleData = curriculum.modules[i];
+      const module = await this.modulesService.create(courseId, userId, {
+        title: moduleData.title,
+        description: moduleData.description,
+        orderIndex: i + 1,
+      });
+
+      for (let j = 0; j < moduleData.lessons.length; j++) {
+        const lessonData = moduleData.lessons[j];
+        await this.lessonsService.create(module.id, userId, {
+          title: lessonData.title,
+          content: lessonData.content,
+          contentType: ContentType.MARKDOWN,
+          orderIndex: j + 1,
+          estimatedDurationMinutes: lessonData.estimatedDuration || 15,
+        });
+      }
+    }
+  }
+
+  async applyQuiz(userId: string, dto: ApplyQuizDto): Promise<void> {
+    const { lessonId, quiz } = dto;
+
+    await this.lessonsService.createQuiz(lessonId, userId, {
+      title: 'Generated Quiz',
+      questions: quiz.questions,
+      passingScore: 80,
+    });
   }
 
   async getRequestStatus(id: string): Promise<AIRequest | null> {

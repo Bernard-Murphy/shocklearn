@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import { 
@@ -60,9 +60,8 @@ interface Course {
   modules: Module[];
 }
 
-export default function CourseEditPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
-  const courseId = resolvedParams.id;
+export default function CourseEditPage({ params }: { params: { id: string } }) {
+  const courseId = params.id;
   const router = useRouter();
   const { user } = useAuth();
   

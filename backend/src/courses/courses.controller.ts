@@ -23,21 +23,23 @@ export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Post()
-  @Roles(UserRole.USER, UserRole.ADMIN)
   create(@CurrentUser() user: User, @Body() createCourseDto: CreateCourseDto) {
     return this.coursesService.create(user.id, createCourseDto);
   }
 
   @Get()
   async findAll(
+    @CurrentUser() user: User,
     @Query('status') status?: CourseStatus,
     @Query('instructorId') instructorId?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
+    const effectiveInstructorId = instructorId === 'me' ? user.id : instructorId;
+
     const result = await this.coursesService.findAll({
       status,
-      instructorId,
+      instructorId: effectiveInstructorId,
       page: page ? parseInt(page, 10) : undefined,
       limit: limit ? parseInt(limit, 10) : undefined,
     });
@@ -57,7 +59,6 @@ export class CoursesController {
   }
 
   @Put(':id')
-  @Roles(UserRole.USER, UserRole.ADMIN)
   update(
     @Param('id') id: string,
     @CurrentUser() user: User,
@@ -67,24 +68,21 @@ export class CoursesController {
   }
 
   @Post(':id/publish')
-  @Roles(UserRole.USER, UserRole.ADMIN)
   publish(@Param('id') id: string, @CurrentUser() user: User) {
     return this.coursesService.publish(id, user.id);
   }
 
   @Delete(':id')
-  @Roles(UserRole.USER, UserRole.ADMIN)
   async remove(@Param('id') id: string, @CurrentUser() user: User) {
     await this.coursesService.remove(id, user.id);
     return { message: 'Course deleted successfully' };
   }
 
   @Get(':id/analytics')
-  @Roles(UserRole.USER, UserRole.ADMIN)
   async getCourseAnalytics(@Param('id') id: string, @CurrentUser() user: User) {
     const course = await this.coursesService.findOne(id);
     
-    // Check ownership for course creators
+    // Check ownership for course creators (Admins bypass this as they don't have the USER role)
     if (user.role === UserRole.USER && course.instructorId !== user.id) {
       throw new ForbiddenException('You can only view analytics for your own courses');
     }

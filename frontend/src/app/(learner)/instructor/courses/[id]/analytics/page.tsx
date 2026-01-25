@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,11 +9,11 @@ import { ArrowLeft, Users, CheckCircle, Clock, TrendingUp, BarChart2, PieChart }
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Progress } from '@/components/ui/progress';
+import BouncyClick from '@/components/ui/bouncy-click';
 
-export default function CourseAnalyticsPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
-  const courseId = resolvedParams.id;
-  
+export default function CourseAnalyticsPage({ params }: { params: { id: string } }) {
+  const courseId = params.id;
+
   const [analytics, setAnalytics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -53,11 +53,13 @@ export default function CourseAnalyticsPage({ params }: { params: Promise<{ id: 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8">
       <div className="flex items-center gap-4">
-        <Link href={`/instructor/courses`}>
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </Link>
+        <BouncyClick>
+          <Link href={`/instructor/courses`}>
+            <Button variant="ghost" size="icon">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </Link>
+        </BouncyClick>
         <div>
           <h1 className="text-3xl font-bold">Course Analytics</h1>
           <p className="text-muted-foreground">Detailed performance metrics for your course</p>

@@ -80,7 +80,7 @@ export class LLMClientService {
     if (responseFormat === 'json') {
       body.response_format = { type: 'json_object' };
     }
-
+console.log(url, body);
     const response = await fetch(url, {
       method: 'POST',
       headers: {

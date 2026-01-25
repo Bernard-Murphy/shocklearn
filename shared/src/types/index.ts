@@ -235,6 +235,16 @@ export interface GenerateQuizDto {
   numberOfQuestions: number;
 }
 
+export interface ApplyCurriculumDto {
+  courseId: string;
+  curriculum: CurriculumOutput;
+}
+
+export interface ApplyQuizDto {
+  lessonId: string;
+  quiz: QuizOutput;
+}
+
 export interface CurriculumOutput {
   modules: {
     title: string;

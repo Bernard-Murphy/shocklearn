@@ -3,7 +3,7 @@ import { AIAgentOrchestratorService } from './services/ai-agent-orchestrator.ser
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles, CurrentUser } from '../common/decorators';
-import { UserRole, GenerateCurriculumDto, GenerateQuizDto } from '@edtech/shared';
+import { UserRole, GenerateCurriculumDto, GenerateQuizDto, ApplyCurriculumDto, ApplyQuizDto } from '@edtech/shared';
 import { User } from '../users/entities/user.entity';
 
 @Controller('ai-agents')
@@ -12,7 +12,6 @@ export class AIAgentsController {
   constructor(private readonly orchestrator: AIAgentOrchestratorService) {}
 
   @Post('generate-curriculum')
-  @Roles(UserRole.USER, UserRole.ADMIN)
   async generateCurriculum(
     @CurrentUser() user: User,
     @Body() input: GenerateCurriculumDto,
@@ -26,7 +25,6 @@ export class AIAgentsController {
   }
 
   @Post('generate-quiz')
-  @Roles(UserRole.USER, UserRole.ADMIN)
   async generateQuiz(@CurrentUser() user: User, @Body() input: GenerateQuizDto) {
     const result = await this.orchestrator.generateQuiz(user.id, input);
     return {
@@ -34,6 +32,18 @@ export class AIAgentsController {
       quiz: result.quiz,
       reasoning: result.quiz.reasoning,
     };
+  }
+
+  @Post('apply-curriculum')
+  async applyCurriculum(@CurrentUser() user: User, @Body() dto: ApplyCurriculumDto) {
+    await this.orchestrator.applyCurriculum(user.id, dto);
+    return { message: 'Curriculum applied successfully' };
+  }
+
+  @Post('apply-quiz')
+  async applyQuiz(@CurrentUser() user: User, @Body() dto: ApplyQuizDto) {
+    await this.orchestrator.applyQuiz(user.id, dto);
+    return { message: 'Quiz applied successfully' };
   }
 
   @Get('recommendations')

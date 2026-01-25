@@ -70,7 +70,7 @@ describe('AuthController (e2e)', () => {
         password,
         firstName: 'Test',
         lastName: 'User',
-        role: 'learner',
+        role: 'user',
       });
 
       // Then login
