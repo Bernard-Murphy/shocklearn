@@ -13,6 +13,8 @@ import Spinner from '@/components/ui/spinner';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fade_out, normalize, transition_fast, fade_out_scale_1 } from '@/lib/transitions';
 
+import { PageTransition } from '@/components/ui/page-transition';
+
 function LearnerShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { user, isLoading, logout } = useAuth();
@@ -103,7 +105,9 @@ function LearnerShell({ children }: { children: React.ReactNode }) {
             </div>
           </aside>
 
-          <main className="flex-1">{children}</main>
+          <main className="flex-1">
+            <PageTransition>{children}</PageTransition>
+          </main>
         </motion.div>}
     </AnimatePresence>
 
