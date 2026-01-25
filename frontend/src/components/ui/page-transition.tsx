@@ -26,10 +26,15 @@ function FrozenRouter({ children }: { children: React.ReactNode }) {
 
 interface PageTransitionProps {
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
-export function PageTransition({ children }: PageTransitionProps) {
+export function PageTransition({ children, disabled }: PageTransitionProps) {
   const pathname = usePathname();
+
+  if (disabled) {
+    return <>{children}</>;
+  }
 
   return (
     <AnimatePresence mode="wait" initial={false}>

@@ -14,6 +14,8 @@ import Spinner from '@/components/ui/spinner';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fade_out, normalize, transition_fast, fade_out_scale_1 } from '@/lib/transitions';
 
+import { PageTransition } from '@/components/ui/page-transition';
+
 export default function InstructorLayout({
   children,
 }: {
@@ -121,7 +123,9 @@ export default function InstructorLayout({
             </div>
           </aside>
 
-          <main className="flex-1">{children}</main>
+          <main className="flex-1">
+            <PageTransition>{children}</PageTransition>
+          </main>
         </motion.div>
       )}
     </AnimatePresence>
