@@ -25,9 +25,8 @@ export default function CreateCoursePage() {
       const course = await apiClient.createCourse({ title, description });
       router.push(`/instructor/courses/${course.id}/edit`);
     } catch (error: any) {
-      alert(error.message || 'Failed to create course');
-    } finally {
       setLoading(false);
+      alert(error.message || 'Failed to create course');
     }
   }
 

@@ -44,6 +44,15 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @Put(':id')
+  @Roles(UserRole.ADMIN)
+  updateUser(
+    @Param('id') id: string,
+    @Body() updateData: { firstName?: string; lastName?: string; role?: UserRole },
+  ) {
+    return this.usersService.update(id, updateData);
+  }
+
   @Delete(':id')
   @Roles(UserRole.ADMIN)
   remove(@Param('id') id: string) {

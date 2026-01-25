@@ -277,6 +277,10 @@ export class ApiClient {
     return this.get<any>(`/lessons/${lessonId}/versions`);
   }
 
+  async getPendingVersionsByCourse(courseId: string) {
+    return this.get<any>(`/courses/${courseId}/pending-versions`);
+  }
+
   async approveVersion(versionId: string) {
     return this.post<any>(`/content-versions/${versionId}/approve`);
   }

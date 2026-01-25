@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { BookOpen, Home, LogOut, Sparkles } from 'lucide-react';
-import { AuthProvider, useAuth } from '@/lib/auth-context';
+import { useAuth } from '@/lib/auth-context';
 import { UserRole } from '@edtech/shared';
 import BouncyClick from '@/components/ui/bouncy-click';
 import Spinner from '@/components/ui/spinner';
@@ -88,10 +88,10 @@ function LearnerShell({ children }: { children: React.ReactNode }) {
               <Separator className="my-2" />
 
               <BouncyClick>
-                <Link href="/instructor">
+                <Link href="/dashboard">
                   <Button variant="ghost" className="w-full justify-start text-muted-foreground">
                     <Sparkles className="mr-2 h-4 w-4" />
-                    Switch to Teaching
+                    Teaching Dashboard
                   </Button>
                 </Link>
               </BouncyClick>
@@ -138,9 +138,7 @@ export default function LearnerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AuthProvider>
-      <LearnerShell>{children}</LearnerShell>
-    </AuthProvider>
+    <LearnerShell>{children}</LearnerShell>
   );
 }
 

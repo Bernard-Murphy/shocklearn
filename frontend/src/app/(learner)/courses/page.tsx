@@ -56,9 +56,8 @@ export default function CourseCatalogPage() {
       await loadData();
       router.push(`/courses/${courseId}`);
     } catch (error: any) {
-      alert(error.message || 'Failed to enroll');
-    } finally {
       setEnrolling(null);
+      alert(error.message || 'Failed to enroll');
     }
   }
 

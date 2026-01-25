@@ -17,6 +17,12 @@ export class ContentVersioningController {
     return this.versioningService.findByLesson(lessonId);
   }
 
+  @Get('courses/:courseId/pending-versions')
+  @Roles(UserRole.USER, UserRole.ADMIN)
+  findPendingByCourse(@Param('courseId') courseId: string) {
+    return this.versioningService.findPendingByCourse(courseId);
+  }
+
   @Post('content-versions/:id/approve')
   @Roles(UserRole.USER, UserRole.ADMIN)
   approve(@Param('id') id: string, @CurrentUser() user: User) {

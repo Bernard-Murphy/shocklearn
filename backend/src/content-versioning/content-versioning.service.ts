@@ -51,6 +51,18 @@ export class ContentVersioningService {
     });
   }
 
+  async findPendingByCourse(courseId: string): Promise<ContentVersion[]> {
+    return this.versionsRepository.createQueryBuilder('version')
+      .innerJoin('version.lesson', 'lesson')
+      .innerJoin('lesson.module', 'module')
+      .where('module.courseId = :courseId', { courseId })
+      .andWhere('version.status = :status', { status: ContentVersionStatus.PENDING })
+      .leftJoinAndSelect('version.author', 'author')
+      .leftJoinAndSelect('version.lesson', 'vLesson')
+      .orderBy('version.createdAt', 'DESC')
+      .getMany();
+  }
+
   async findOne(id: string): Promise<ContentVersion> {
     const version = await this.versionsRepository.findOne({
       where: { id },
