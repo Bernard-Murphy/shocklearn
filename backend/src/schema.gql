@@ -1,0 +1,27 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CourseDetailOutput {
+  description: String!
+  id: String!
+  modules: [ModuleOutput!]!
+  title: String!
+}
+
+type LessonOutput {
+  content: String!
+  id: String!
+  orderIndex: Int!
+  title: String!
+}
+
+type ModuleOutput {
+  id: String!
+  lessons: [LessonOutput!]!
+  title: String!
+}
+
+type Query {
+  courseWithFullStructure(id: ID!): CourseDetailOutput!
+}

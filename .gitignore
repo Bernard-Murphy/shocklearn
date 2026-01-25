@@ -1,0 +1,45 @@
+# Development
+.env
+.env.local
+.env*.local
+
+# Dependencies
+node_modules
+*/node_modules/
+
+# Build outputs
+dist
+build/
+.next/
+out/
+
+# Database
+*.db
+*.sqlite
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Testing
+coverage/
+.nyc_output
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+.cache/
+.temp/
+tmp/
