@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/lib/auth-context';
 import { UserRole } from '@edtech/shared';
+import BouncyClick from '@/components/ui/bouncy-click';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -106,9 +107,11 @@ export default function RegisterPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Creating account...' : 'Create Account'}
-            </Button>
+            <BouncyClick className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Creating account...' : 'Create Account'}
+              </Button>
+            </BouncyClick>
             <p className="text-sm text-center text-muted-foreground">
               Already have an account?{' '}
               <Link href="/login" className="text-primary hover:underline">

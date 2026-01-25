@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
@@ -13,7 +13,6 @@ import BouncyClick from '@/components/ui/bouncy-click';
 import Spinner from '@/components/ui/spinner';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fade_out, normalize, transition_fast, fade_out_scale_1 } from '@/lib/transitions';
-
 import { PageTransition } from '@/components/ui/page-transition';
 
 export default function InstructorLayout({
@@ -23,11 +22,13 @@ export default function InstructorLayout({
 }) {
   const router = useRouter();
   const { user, isLoading, logout } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (!isLoading) {
       if (!user) {
         router.push('/login');
+
       } else if (user.role !== UserRole.INSTRUCTOR && user.role !== UserRole.ADMIN) {
         router.push('/dashboard');
       }
@@ -36,13 +37,17 @@ export default function InstructorLayout({
   }, [user, isLoading]);
 
   async function handleLogout() {
-    await logout();
-    router.push('/');
+    setIsLoggingOut(true);
+    setTimeout(async () => {
+      await logout();
+      // router.push('/');
+    }, 250);
+
   }
 
   return (
     <AnimatePresence mode="wait">
-      {isLoading || !user ? (
+      {isLoading || !user || isLoggingOut ? (
         <motion.div
           key="loading"
           initial={fade_out}
@@ -51,7 +56,7 @@ export default function InstructorLayout({
           transition={transition_fast}
           className="flex min-h-screen items-center justify-center"
         >
-          <Spinner color="dark" />
+          {/* <Spinner color="dark" /> */}
         </motion.div>
       ) : (
         <motion.div

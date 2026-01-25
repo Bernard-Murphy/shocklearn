@@ -93,6 +93,7 @@ export default function CourseCatalogPage() {
           animate={normalize}
           exit={fade_out_scale_1}
           transition={transition_fast}
+          className="p-8 space-y-6"
         >
           <div>
             <h1 className="text-3xl font-bold">Course Catalog</h1>

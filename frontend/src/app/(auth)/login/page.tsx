@@ -70,7 +70,7 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <BouncyClick disabled={isLoading}>
+            <BouncyClick className="w-full" disabled={isLoading}>
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? <>
                   <Spinner size="sm" color="white" className="mr-2" />

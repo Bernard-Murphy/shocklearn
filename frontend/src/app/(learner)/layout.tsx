@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -18,22 +18,28 @@ import { PageTransition } from '@/components/ui/page-transition';
 function LearnerShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { user, isLoading, logout } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !user) {
       router.push('/login');
+
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isLoading]);
 
   async function handleLogout() {
-    await logout();
-    router.push('/');
+    setIsLoggingOut(true);
+    setTimeout(async () => {
+      await logout();
+      // router.push('/');
+    }, 250);
+
   }
 
   return (
     <AnimatePresence mode="wait">
-      {isLoading || !user ?
+      {isLoading || !user || isLoggingOut ?
         <motion.div
           key="loading"
           initial={fade_out}
@@ -42,7 +48,7 @@ function LearnerShell({ children }: { children: React.ReactNode }) {
           transition={transition_fast}
           className="flex min-h-screen items-center justify-center"
         >
-          <Spinner color="dark" />
+          {/* <Spinner color="dark" /> */}
         </motion.div> :
         <motion.div
           className="flex min-h-screen"
