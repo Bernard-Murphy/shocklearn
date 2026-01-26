@@ -11,6 +11,7 @@ import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fade_out, normalize, transition_fast, fade_out_scale_1 } from '@/lib/transitions';
+import BouncyClick from '@/components/ui/bouncy-click';
 
 export default function LessonViewerPage() {
   const params = useParams();
@@ -98,12 +99,14 @@ export default function LessonViewerPage() {
               transition={transition_fast}
             >
               <div className="flex items-center justify-between">
-                <Link href={`/courses/${courseId}`}>
-                  <Button variant="ghost" size="sm">
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back to Course
-                  </Button>
-                </Link>
+                <BouncyClick>
+                  <Link href={`/courses/${courseId}`}>
+                    <Button variant="ghost" size="sm">
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      Back to Course
+                    </Button>
+                  </Link>
+                </BouncyClick>
               </div>
 
               <div>
@@ -134,12 +137,14 @@ export default function LessonViewerPage() {
                       </CardHeader>
                       <CardContent className="space-y-2">
                         {quizzes.map((quiz: any) => (
-                          <Link key={quiz.id} href={`/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}/quiz/${quiz.id}`}>
-                            <Button variant="outline" className="w-full justify-start">
-                              {quiz.title}
-                              <ArrowRight className="ml-auto h-4 w-4" />
-                            </Button>
-                          </Link>
+                          <BouncyClick key={quiz.id}>
+                            <Link key={quiz.id} href={`/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}/quiz/${quiz.id}`}>
+                              <Button variant="outline" className="w-full justify-start">
+                                {quiz.title}
+                                <ArrowRight className="ml-auto h-4 w-4" />
+                              </Button>
+                            </Link>
+                          </BouncyClick>
                         ))}
                       </CardContent>
                     </Card>
@@ -148,10 +153,12 @@ export default function LessonViewerPage() {
               </AnimatePresence>
 
               <div className="flex justify-end">
-                <Button onClick={handleComplete} size="lg">
-                  <CheckCircle className="mr-2 h-5 w-5" />
-                  Mark as Complete
-                </Button>
+                <BouncyClick>
+                  <Button onClick={handleComplete} size="lg">
+                    <CheckCircle className="mr-2 h-5 w-5" />
+                    Mark as Complete
+                  </Button>
+                </BouncyClick>
               </div>
             </motion.div>}
         </AnimatePresence>}

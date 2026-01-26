@@ -16,6 +16,7 @@ import { useAuth } from '@/lib/auth-context';
 import { CreateCourseDialog } from '@/components/instructor/create-course-dialog';
 import BouncyClick from '@/components/ui/bouncy-click';
 import { cn } from '@/lib/utils';
+import Spinner from '@/components/ui/spinner';
 
 interface Course {
   id: string;
@@ -184,7 +185,10 @@ export default function CourseCatalogPage() {
                                   onClick={() => handleEnroll(course.id)}
                                   disabled={enrolling === course.id}
                                 >
-                                  {enrolling === course.id ? 'Enrolling...' : 'Enroll Now'}
+                                  {enrolling === course.id ? <>
+                                    <Spinner size="sm" color="white" className="mr-2" />
+                                    Enrolling
+                                  </> : 'Enroll Now'}
                                 </Button>
                               </BouncyClick>
                             )}

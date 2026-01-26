@@ -11,11 +11,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import Spinner from '@/components/ui/spinner';
+import BouncyClick from '@/components/ui/bouncy-click';
 
 export default function ContentReviewPage({ params }: { params: { id: string } }) {
   const courseId = params.id;
   const router = useRouter();
-  
+
   const [pendingVersions, setPendingVersions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedVersion, setSelectedVersion] = useState<any>(null);
@@ -84,11 +86,13 @@ export default function ContentReviewPage({ params }: { params: { id: string } }
     <div className="p-8 h-[calc(100vh-2rem)] flex flex-col space-y-6">
       <div className="flex items-center justify-between shrink-0">
         <div className="flex items-center gap-4">
-          <Link href={`/instructor/courses/${courseId}/edit`}>
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
+          <BouncyClick>
+            <Link href={`/instructor/courses/${courseId}/edit`}>
+              <Button variant="ghost" size="icon">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            </Link>
+          </BouncyClick>
           <div>
             <h1 className="text-2xl font-bold">Content Review</h1>
             <p className="text-muted-foreground">Review and approve AI-generated or contributor content</p>
@@ -104,9 +108,11 @@ export default function ContentReviewPage({ params }: { params: { id: string } }
               <h3 className="font-semibold text-lg">All caught up!</h3>
               <p className="text-muted-foreground">No pending content versions to review.</p>
             </div>
-            <Link href={`/instructor/courses/${courseId}/edit`}>
-              <Button variant="outline">Back to Course</Button>
-            </Link>
+            <BouncyClick>
+              <Link href={`/instructor/courses/${courseId}/edit`}>
+                <Button variant="outline">Back to Course</Button>
+              </Link>
+            </BouncyClick>
           </CardContent>
         </Card>
       ) : (
@@ -120,27 +126,28 @@ export default function ContentReviewPage({ params }: { params: { id: string } }
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-2">
                   {pendingVersions.map((version) => (
-                    <button
-                      key={version.id}
-                      onClick={() => setSelectedVersion(version)}
-                      className={`w-full text-left p-3 rounded-lg border transition-all ${
-                        selectedVersion?.id === version.id
+                    <BouncyClick key={version.id}>
+                      <button
+                        key={version.id}
+                        onClick={() => setSelectedVersion(version)}
+                        className={`w-full text-left p-3 rounded-lg border transition-all ${selectedVersion?.id === version.id
                           ? 'bg-primary/5 border-primary ring-1 ring-primary'
                           : 'hover:bg-muted border-transparent'
-                      }`}
-                    >
-                      <div className="flex justify-between items-start mb-1">
-                        <span className="font-medium text-sm line-clamp-1">{version.lesson?.title}</span>
-                        <Badge variant="outline" className="text-[10px] h-4">v{version.versionNumber}</Badge>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
-                        <User className="h-3 w-3" />
-                        <span>{version.author?.firstName} {version.author?.lastName}</span>
-                      </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2 italic">
-                        "{version.changeDescription}"
-                      </p>
-                    </button>
+                          }`}
+                      >
+                        <div className="flex justify-between items-start mb-1">
+                          <span className="font-medium text-sm line-clamp-1">{version.lesson?.title}</span>
+                          <Badge variant="outline" className="text-[10px] h-4">v{version.versionNumber}</Badge>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                          <User className="h-3 w-3" />
+                          <span>{version.author?.firstName} {version.author?.lastName}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground line-clamp-2 italic">
+                          "{version.changeDescription}"
+                        </p>
+                      </button>
+                    </BouncyClick>
                   ))}
                 </div>
               </ScrollArea>
@@ -163,25 +170,40 @@ export default function ContentReviewPage({ params }: { params: { id: string } }
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="text-destructive hover:bg-destructive/10"
-                        onClick={() => handleReject(selectedVersion.id)}
-                        disabled={processing}
-                      >
-                        <X className="mr-2 h-4 w-4" />
-                        Reject
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        className="bg-green-600 hover:bg-green-700"
-                        onClick={() => handleApprove(selectedVersion.id)}
-                        disabled={processing}
-                      >
-                        <Check className="mr-2 h-4 w-4" />
-                        Approve
-                      </Button>
+                      <BouncyClick disabled={processing}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-destructive hover:bg-destructive/10"
+                          onClick={() => handleReject(selectedVersion.id)}
+                          disabled={processing}
+                        >
+                          {processing ? <>
+                            <Spinner size="sm" color="white" className="mr-2" />
+                            Rejecting
+                          </> : <>
+                            <X className="mr-2 h-4 w-4" />
+                            Reject
+                          </>}
+                        </Button>
+                      </BouncyClick>
+
+                      <BouncyClick disabled={processing}>
+                        <Button
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700"
+                          onClick={() => handleApprove(selectedVersion.id)}
+                          disabled={processing}
+                        >
+                          {processing ? <>
+                            <Spinner size="sm" color="white" className="mr-2" />
+                            Approving
+                          </> : <>
+                            <Check className="mr-2 h-4 w-4" />
+                            Approve
+                          </>}
+                        </Button>
+                      </BouncyClick>
                     </div>
                   </div>
                 </CardHeader>

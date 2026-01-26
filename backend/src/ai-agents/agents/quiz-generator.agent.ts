@@ -27,12 +27,8 @@ export class QuizGeneratorAgent {
   }
 
   private validateInput(input: GenerateQuizDto): void {
-    if (!input.lessonContent || input.lessonContent.trim().length < 50) {
-      throw new Error('Lesson content must be at least 50 characters');
-    }
-
-    if (!input.learningObjectives || input.learningObjectives.length === 0) {
-      throw new Error('Learning objectives are required');
+    if (!input.lessonId) {
+      throw new Error('Lesson ID is required');
     }
 
     if (!input.numberOfQuestions || input.numberOfQuestions < 1 || input.numberOfQuestions > 20) {
@@ -45,10 +41,13 @@ export class QuizGeneratorAgent {
   }
 
   private constructPrompt(input: GenerateQuizDto): LLMMessage[] {
-    const systemMessage = `You are an expert educational assessment designer. Your task is to create high-quality quiz questions that accurately assess understanding of the lesson content and learning objectives.
+    const systemMessage = `You are an expert educational content and assessment designer. Your task is to:
+1. Generate comprehensive, high-quality lesson content in Markdown format based on the lesson title and any additional details provided.
+2. Create a high-quality quiz that accurately assesses understanding of the generated lesson content.
 
 Your response must be valid JSON matching this exact schema:
 {
+  "lessonContent": "string (Markdown format)",
   "questions": [
     {
       "id": "unique_string_id",
@@ -59,22 +58,26 @@ Your response must be valid JSON matching this exact schema:
       "explanation": "string explaining why this is correct"
     }
   ],
-  "reasoning": "Explanation of what concepts each question tests and why they're appropriate for the difficulty level"
+  "reasoning": "Explanation of the lesson content structure and what concepts each question tests"
 }`;
 
-    const userMessage = `Create ${input.numberOfQuestions} quiz questions based on the following:
+    const userMessage = `Create a lesson and ${input.numberOfQuestions} quiz questions based on the following:
 
-Lesson Content:
-${input.lessonContent}
-
-Learning Objectives:
-${input.learningObjectives.map((obj, i) => `${i + 1}. ${obj}`).join('\n')}
+Lesson Title: ${input.lessonTitle || 'Untitled Lesson'}
+Additional Details: ${input.additionalDetails || 'None provided'}
 
 Difficulty Level: ${input.difficultyLevel}
 
-Requirements:
+Requirements for Lesson Content:
+- Write in clear, engaging Markdown
+- Include headers, lists, and bold text for readability
+- Ensure content is thorough and appropriate for ${input.difficultyLevel} level
+- Content should be at least 500 words
+
+Requirements for Quiz:
+- Create ${input.numberOfQuestions} questions
 - Create a mix of multiple-choice (70%) and short-answer (30%) questions
-- Each question should test a specific concept from the lesson
+- Each question should test a specific concept from the generated lesson
 - Multiple-choice questions should have 4 options with only one correct answer
 - Avoid ambiguous or trick questions
 - Include explanations for correct answers
@@ -93,6 +96,10 @@ Return your response as valid JSON.`;
     const result = await this.llmClient.parseJSON<QuizOutput>(content);
 
     // Validate structure
+    if (!result.lessonContent || result.lessonContent.trim().length < 100) {
+      throw new Error('Invalid quiz structure: missing or too short lesson content');
+    }
+
     if (!result.questions || !Array.isArray(result.questions)) {
       throw new Error('Invalid quiz structure: missing questions array');
     }

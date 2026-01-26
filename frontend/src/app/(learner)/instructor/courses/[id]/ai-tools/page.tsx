@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { fade_out, normalize, transition_fast, fade_out_scale_1 } from '@/lib/transitions';
 import BouncyClick from '@/components/ui/bouncy-click';
 import Link from 'next/link';
+import Spinner from '@/components/ui/spinner';
 
 export default function AIToolsPage() {
   const params = useParams();
@@ -28,8 +29,7 @@ export default function AIToolsPage() {
   });
   const [quizData, setQuizData] = useState({
     lessonId: '',
-    lessonContent: '',
-    learningObjectives: '',
+    additionalDetails: '',
     difficultyLevel: 'intermediate',
     numberOfQuestions: '5',
   });
@@ -85,9 +85,9 @@ export default function AIToolsPage() {
 
     try {
       const response = await apiClient.generateQuiz({
-        lessonContent: quizData.lessonContent,
-        learningObjectives: quizData.learningObjectives.split('\n').filter((o) => o.trim()),
-        difficultyLevel: quizData.difficultyLevel,
+        lessonId: quizData.lessonId,
+        additionalDetails: quizData.additionalDetails,
+        difficultyLevel: quizData.difficultyLevel as any,
         numberOfQuestions: parseInt(quizData.numberOfQuestions),
       });
 
@@ -139,11 +139,13 @@ export default function AIToolsPage() {
     <div className="p-8 space-y-6 max-w-5xl mx-auto">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href={`/instructor/courses/${courseId}/edit`}>
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
+          <BouncyClick>
+            <Link href={`/instructor/courses/${courseId}/edit`}>
+              <Button variant="ghost" size="icon">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            </Link>
+          </BouncyClick>
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-2">
               <Sparkles className="h-8 w-8 text-primary" />
@@ -215,9 +217,12 @@ export default function AIToolsPage() {
                       />
                     </div>
 
-                    <BouncyClick className="w-full">
+                    <BouncyClick disabled={loading} className="w-full">
                       <Button type="submit" disabled={loading} className="w-full">
-                        {loading ? 'Generating...' : 'Generate Curriculum'}
+                        {loading ? <>
+                          <Spinner size="sm" color="white" className="mr-2" />
+                          Generating
+                        </> : 'Generate Curriculum'}
                       </Button>
                     </BouncyClick>
                   </CardContent>
@@ -259,26 +264,13 @@ export default function AIToolsPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="lessonContent">Lesson Content *</Label>
+                      <Label htmlFor="additionalDetails">Additional Details (Optional)</Label>
                       <Textarea
-                        id="lessonContent"
-                        value={quizData.lessonContent}
-                        onChange={(e) => setQuizData({ ...quizData, lessonContent: e.target.value })}
-                        placeholder="Paste the lesson content here..."
+                        id="additionalDetails"
+                        value={quizData.additionalDetails}
+                        onChange={(e) => setQuizData({ ...quizData, additionalDetails: e.target.value })}
+                        placeholder="Include specific topics, examples, or style preferences..."
                         rows={6}
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="learningObjectives">Learning Objectives (one per line) *</Label>
-                      <Textarea
-                        id="learningObjectives"
-                        value={quizData.learningObjectives}
-                        onChange={(e) => setQuizData({ ...quizData, learningObjectives: e.target.value })}
-                        placeholder="Understand the concept&#10;Apply the technique"
-                        rows={3}
-                        required
                       />
                     </div>
 
@@ -311,9 +303,12 @@ export default function AIToolsPage() {
                       </div>
                     </div>
 
-                    <BouncyClick className="w-full">
+                    <BouncyClick disabled={loading} className="w-full">
                       <Button type="submit" disabled={loading} className="w-full">
-                        {loading ? 'Generating...' : 'Generate Quiz'}
+                        {loading ? <>
+                          <Spinner size="sm" color="white" className="mr-2" />
+                          Generating
+                        </> : 'Generate Quiz'}
                       </Button>
                     </BouncyClick>
                   </CardContent>
@@ -335,12 +330,24 @@ export default function AIToolsPage() {
           >
             <Card>
               <CardHeader>
-                <CardTitle>Generated {result.type === 'curriculum' ? 'Curriculum' : 'Quiz'}</CardTitle>
+                <CardTitle>Generated {result.type === 'curriculum' ? 'Curriculum' : 'Lesson & Quiz'}</CardTitle>
                 <CardDescription>Review and apply to your course</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="bg-muted p-4 rounded-md">
-                  <pre className="text-sm overflow-auto max-h-96">{JSON.stringify(result.data, null, 2)}</pre>
+                {result.type === 'quiz' && result.data.lessonContent && (
+                  <div className="space-y-2">
+                    <Label>Generated Lesson Content</Label>
+                    <div className="bg-muted p-4 rounded-md max-h-60 overflow-auto prose prose-sm dark:prose-invert">
+                      <pre className="whitespace-pre-wrap text-xs">{result.data.lessonContent}</pre>
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label>{result.type === 'curriculum' ? 'Curriculum Structure' : 'Quiz Questions'}</Label>
+                  <div className="bg-muted p-4 rounded-md">
+                    <pre className="text-sm overflow-auto max-h-96">{JSON.stringify(result.type === 'curriculum' ? result.data : result.data.questions, null, 2)}</pre>
+                  </div>
                 </div>
 
                 {result.reasoning && (
@@ -351,12 +358,15 @@ export default function AIToolsPage() {
                 )}
 
                 <div className="flex gap-2">
-                  <BouncyClick>
+                  <BouncyClick disabled={applying}>
                     <Button onClick={handleApply} disabled={applying}>
-                      {applying ? 'Applying...' : 'Apply to Course'}
+                      {applying ? <>
+                        <Spinner size="sm" color="white" className="mr-2" />
+                        Applying
+                      </> : 'Apply to Course'}
                     </Button>
                   </BouncyClick>
-                  <BouncyClick>
+                  <BouncyClick disabled={applying}>
                     <Button variant="outline" onClick={() => setResult(null)} disabled={applying}>
                       Clear
                     </Button>

@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useAuth } from '@/lib/auth-context';
 import { UserRole } from '@edtech/shared';
 import BouncyClick from '@/components/ui/bouncy-click';
+import Spinner from '@/components/ui/spinner';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -97,7 +98,10 @@ export default function RegisterPage() {
           <CardFooter className="flex flex-col space-y-4">
             <BouncyClick className="w-full" disabled={isLoading}>
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Creating account...' : 'Create Account'}
+                {isLoading ? <>
+                  <Spinner size="sm" color="white" className="mr-2" />
+                  Creating account
+                </> : 'Create Account'}
               </Button>
             </BouncyClick>
             <p className="text-sm text-center text-muted-foreground">

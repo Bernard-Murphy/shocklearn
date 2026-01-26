@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import {
   Dialog,
@@ -14,63 +13,67 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import BouncyClick from '../ui/bouncy-click';
+import Spinner from '../ui/spinner';
 
-interface CreateCourseDialogProps {
+interface AddModuleDialogProps {
+  courseId: string;
+  orderIndex: number;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccess: (newModule: any) => void;
 }
 
-export function CreateCourseDialog({ open, onOpenChange }: CreateCourseDialogProps) {
-  const router = useRouter();
+export function AddModuleDialog({
+  courseId,
+  orderIndex,
+  open,
+  onOpenChange,
+  onSuccess,
+}: AddModuleDialogProps) {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
+    if (!title.trim()) return;
 
+    setLoading(true);
     try {
-      const course = await apiClient.createCourse({ title, description });
+      const newModule = await apiClient.createModule(courseId, {
+        title: title.trim(),
+        description: '',
+        orderIndex: orderIndex,
+      });
+      onSuccess(newModule);
+      setTitle('');
       onOpenChange(false);
-      router.push(`/instructor/courses/${course.id}/edit`);
     } catch (error: any) {
+      alert(error.message || 'Failed to add module');
+    } finally {
       setLoading(false);
-      alert(error.message || 'Failed to create course');
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[525px]">
+      <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Create New Course</DialogTitle>
+            <DialogTitle>Add New Module</DialogTitle>
             <DialogDescription>
-              Start by providing basic course information. You can add content later.
+              Enter a title for the new course module.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="title">Course Title *</Label>
+              <Label htmlFor="module-title">Module Title</Label>
               <Input
-                id="title"
+                id="module-title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Introduction to Web Development"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="description">Description *</Label>
-              <Textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Describe what students will learn in this course..."
-                rows={4}
+                placeholder="e.g., Getting Started"
+                autoFocus
                 required
               />
             </div>
@@ -82,9 +85,15 @@ export function CreateCourseDialog({ open, onOpenChange }: CreateCourseDialogPro
               </Button>
             </BouncyClick>
             <BouncyClick>
-
-              <Button type="submit" disabled={loading}>
-                {loading ? 'Creating...' : 'Create Course'}
+              <Button type="submit" disabled={loading || !title.trim()}>
+                {loading ? (
+                  <>
+                    <Spinner size="sm" color="white" className="mr-2" />
+                    Adding...
+                  </>
+                ) : (
+                  'Add Module'
+                )}
               </Button>
             </BouncyClick>
           </DialogFooter>
@@ -93,4 +102,3 @@ export function CreateCourseDialog({ open, onOpenChange }: CreateCourseDialogPro
     </Dialog>
   );
 }
-

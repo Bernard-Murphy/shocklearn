@@ -9,10 +9,11 @@ import { ArrowLeft, Plus, Trash2, Edit2, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import BouncyClick from '@/components/ui/bouncy-click';
 
 export default function LessonQuizPage({ params }: { params: { id: string, lessonId: string } }) {
   const { id: courseId, lessonId } = params;
-  
+
   const [quizzes, setQuizzes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -55,27 +56,33 @@ export default function LessonQuizPage({ params }: { params: { id: string, lesso
     <div className="p-8 max-w-5xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href={`/instructor/courses/${courseId}/edit/lessons/${lessonId}`}>
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
+          <BouncyClick>
+            <Link href={`/instructor/courses/${courseId}/edit/lessons/${lessonId}`}>
+              <Button variant="ghost" size="icon">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            </Link>
+          </BouncyClick>
           <div>
             <h1 className="text-2xl font-bold">Lesson Quizzes</h1>
             <p className="text-muted-foreground">Manage assessments for this lesson</p>
           </div>
         </div>
         <div className="flex gap-2">
-          <Link href={`/instructor/courses/${courseId}/ai-tools`}>
-            <Button variant="outline">
-              <Sparkles className="mr-2 h-4 w-4" />
-              Generate with AI
+          <BouncyClick>
+            <Link href={`/instructor/courses/${courseId}/ai-tools`}>
+              <Button variant="outline">
+                <Sparkles className="mr-2 h-4 w-4" />
+                Generate with AI
+              </Button>
+            </Link>
+          </BouncyClick>
+          <BouncyClick>
+            <Button onClick={() => {/* Create manual quiz placeholder */ alert('Create manual quiz coming soon. Use AI Tools for now.') }}>
+              <Plus className="mr-2 h-4 w-4" />
+              Create Quiz
             </Button>
-          </Link>
-          <Button onClick={() => {/* Create manual quiz placeholder */ alert('Create manual quiz coming soon. Use AI Tools for now.')}}>
-            <Plus className="mr-2 h-4 w-4" />
-            Create Quiz
-          </Button>
+          </BouncyClick>
         </div>
       </div>
 
@@ -90,9 +97,11 @@ export default function LessonQuizPage({ params }: { params: { id: string, lesso
                 <h3 className="font-medium">No quizzes yet</h3>
                 <p className="text-sm text-muted-foreground">Assess student knowledge by adding a quiz</p>
               </div>
-              <Link href={`/instructor/courses/${courseId}/ai-tools`}>
-                <Button variant="outline">Use AI to Generate Quiz</Button>
-              </Link>
+              <BouncyClick>
+                <Link href={`/instructor/courses/${courseId}/ai-tools`}>
+                  <Button variant="outline">Use AI to Generate Quiz</Button>
+                </Link>
+              </BouncyClick>
             </CardContent>
           </Card>
         ) : (
@@ -105,12 +114,16 @@ export default function LessonQuizPage({ params }: { params: { id: string, lesso
                     <CardDescription>{quiz.questions?.length || 0} Questions • Passing score: {quiz.passingScore}%</CardDescription>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => {/* Edit quiz placeholder */}}>
-                      <Edit2 className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDeleteQuiz(quiz.id)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <BouncyClick>
+                      <Button variant="ghost" size="icon" onClick={() => {/* Edit quiz placeholder */ }}>
+                        <Edit2 className="h-4 w-4" />
+                      </Button>
+                    </BouncyClick>
+                    <BouncyClick>
+                      <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDeleteQuiz(quiz.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </BouncyClick>
                   </div>
                 </div>
               </CardHeader>

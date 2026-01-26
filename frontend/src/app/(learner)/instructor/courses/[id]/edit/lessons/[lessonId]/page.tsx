@@ -12,16 +12,18 @@ import { ArrowLeft, Save, Eye, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import ReactMarkdown from 'react-markdown';
+import BouncyClick from '@/components/ui/bouncy-click';
+import { Separator } from '@/components/ui/separator';
 
 export default function LessonEditPage({ params }: { params: { id: string, lessonId: string } }) {
   const { id: courseId, lessonId } = params;
   const router = useRouter();
-  
+
   const [lesson, setLesson] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-  
+
   // Form states
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -75,25 +77,32 @@ export default function LessonEditPage({ params }: { params: { id: string, lesso
     <div className="p-8 max-w-5xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href={`/instructor/courses/${courseId}/edit`}>
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
+          <BouncyClick>
+            <Link href={`/instructor/courses/${courseId}/edit`}>
+              <Button variant="ghost" size="icon">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            </Link>
+          </BouncyClick>
           <div>
             <h1 className="text-2xl font-bold">Edit Lesson</h1>
             <p className="text-muted-foreground">{lesson?.title}</p>
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setIsPreview(!isPreview)}>
-            <Eye className="mr-2 h-4 w-4" />
-            {isPreview ? 'Edit Mode' : 'Preview'}
-          </Button>
-          <Button onClick={handleSave} disabled={saving}>
-            <Save className="mr-2 h-4 w-4" />
-            {saving ? 'Saving...' : 'Save'}
-          </Button>
+          <BouncyClick>
+            <Button variant="outline" onClick={() => setIsPreview(!isPreview)}>
+              <Eye className="mr-2 h-4 w-4" />
+              {isPreview ? 'Edit Mode' : 'Preview'}
+            </Button>
+          </BouncyClick>
+          <BouncyClick>
+            <Button onClick={handleSave} disabled={saving}>
+              <Save className="mr-2 h-4 w-4" />
+              {saving ? 'Saving...' : 'Save'}
+            </Button>
+          </BouncyClick>
+
         </div>
       </div>
 
@@ -109,24 +118,26 @@ export default function LessonEditPage({ params }: { params: { id: string, lesso
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Lesson Title</Label>
-                <Input 
-                  id="title" 
-                  value={title} 
-                  onChange={e => setTitle(e.target.value)} 
+                <Input
+                  id="title"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <Label htmlFor="content">Content (Markdown)</Label>
-                  <Button variant="ghost" size="sm" className="text-primary h-8" onClick={() => {/* AI tools link */}}>
-                    <Sparkles className="mr-2 h-3 w-3" />
-                    AI Assist
-                  </Button>
+                  <BouncyClick>
+                    <Button variant="ghost" size="sm" className="text-primary h-8" onClick={() => {/* AI tools link */ }}>
+                      <Sparkles className="mr-2 h-3 w-3" />
+                      AI Assist
+                    </Button>
+                  </BouncyClick>
                 </div>
-                <Textarea 
-                  id="content" 
-                  value={content} 
-                  onChange={e => setContent(e.target.value)} 
+                <Textarea
+                  id="content"
+                  value={content}
+                  onChange={e => setContent(e.target.value)}
                   className="min-h-[600px] font-mono text-sm"
                   placeholder="Write your lesson content in markdown..."
                 />
@@ -143,22 +154,24 @@ export default function LessonEditPage({ params }: { params: { id: string, lesso
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="duration">Estimated Duration (mins)</Label>
-                <Input 
-                  id="duration" 
-                  type="number" 
-                  value={duration} 
-                  onChange={e => setDuration(parseInt(e.target.value))} 
+                <Input
+                  id="duration"
+                  type="number"
+                  value={duration}
+                  onChange={e => setDuration(parseInt(e.target.value))}
                 />
               </div>
               <Separator />
               <div className="space-y-2">
                 <Label>Quizzes</Label>
                 <div className="space-y-2">
-                  <Link href={`/instructor/courses/${courseId}/edit/lessons/${lessonId}/quiz`}>
-                    <Button variant="outline" className="w-full justify-start">
-                      Manage Quizzes
-                    </Button>
-                  </Link>
+                  <BouncyClick>
+                    <Link href={`/instructor/courses/${courseId}/edit/lessons/${lessonId}/quiz`}>
+                      <Button variant="outline" className="w-full justify-start">
+                        Manage Quizzes
+                      </Button>
+                    </Link>
+                  </BouncyClick>
                 </div>
               </div>
             </CardContent>

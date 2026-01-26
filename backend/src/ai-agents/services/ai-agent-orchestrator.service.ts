@@ -79,6 +79,10 @@ export class AIAgentOrchestratorService {
     userId: string,
     input: GenerateQuizDto,
   ): Promise<{ request: AIRequest; response: AIResponse; quiz: QuizOutput }> {
+    // Fetch lesson title for context
+    const lesson = await this.lessonsService.findOne(input.lessonId);
+    input.lessonTitle = lesson.title;
+
     const request = await this.createRequest(userId, AgentType.QUIZ_GENERATOR, input);
 
     try {
@@ -164,6 +168,13 @@ export class AIAgentOrchestratorService {
 
   async applyQuiz(userId: string, dto: ApplyQuizDto): Promise<void> {
     const { lessonId, quiz } = dto;
+
+    // Apply generated lesson content
+    if (quiz.lessonContent) {
+      await this.lessonsService.update(lessonId, userId, {
+        content: quiz.lessonContent,
+      });
+    }
 
     await this.lessonsService.createQuiz(lessonId, userId, {
       title: 'Generated Quiz',

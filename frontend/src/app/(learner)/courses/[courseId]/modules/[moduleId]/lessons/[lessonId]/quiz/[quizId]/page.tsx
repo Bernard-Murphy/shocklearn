@@ -13,6 +13,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fade_out, normalize, transition_fast, fade_out_scale_1 } from '@/lib/transitions';
+import Spinner from '@/components/ui/spinner';
+import BouncyClick from '@/components/ui/bouncy-click';
 
 export default function QuizPage() {
   const params = useParams();
@@ -87,12 +89,15 @@ export default function QuizPage() {
                   transition={transition_fast}
                   className="p-8 space-y-6 max-w-4xl mx-auto"
                 >
-                  <Link href={`/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`}>
-                    <Button variant="ghost" size="sm">
-                      <ArrowLeft className="h-4 w-4 mr-2" />
-                      Back to Lesson
-                    </Button>
-                  </Link>
+                  <BouncyClick>
+
+                    <Link href={`/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`}>
+                      <Button variant="ghost" size="sm">
+                        <ArrowLeft className="h-4 w-4 mr-2" />
+                        Back to Lesson
+                      </Button>
+                    </Link>
+                  </BouncyClick>
 
                   <Card className={result.passed ? 'border-green-500' : 'border-red-500'}>
                     <CardHeader>
@@ -160,12 +165,16 @@ export default function QuizPage() {
                       </div>
 
                       <div className="flex gap-4">
-                        <Button onClick={() => setResult(null)} variant="outline">
-                          Retake Quiz
-                        </Button>
-                        <Link href={`/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`}>
-                          <Button>Back to Lesson</Button>
-                        </Link>
+                        <BouncyClick>
+                          <Button onClick={() => setResult(null)} variant="outline">
+                            Retake Quiz
+                          </Button>
+                        </BouncyClick>
+                        <BouncyClick>
+                          <Link href={`/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`}>
+                            <Button>Back to Lesson</Button>
+                          </Link>
+                        </BouncyClick>
                       </div>
                     </CardContent>
                   </Card>
@@ -178,12 +187,15 @@ export default function QuizPage() {
                   transition={transition_fast}
                 >
                   <div className="p-8 space-y-6 max-w-4xl mx-auto">
-                    <Link href={`/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`}>
-                      <Button variant="ghost" size="sm">
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Lesson
-                      </Button>
-                    </Link>
+                    <BouncyClick>
+                      <Link href={`/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`}>
+                        <Button variant="ghost" size="sm">
+                          <ArrowLeft className="h-4 w-4 mr-2" />
+                          Back to Lesson
+                        </Button>
+                      </Link>
+                    </BouncyClick>
+
 
                     <Card>
                       <CardHeader>
@@ -224,14 +236,19 @@ export default function QuizPage() {
                           </Card>
                         ))}
 
-                        <Button
-                          onClick={handleSubmit}
-                          disabled={submitting || Object.keys(answers).length < quiz.questions.length}
-                          size="lg"
-                          className="w-full"
-                        >
-                          {submitting ? 'Submitting...' : 'Submit Quiz'}
-                        </Button>
+                        <BouncyClick className="w-full">
+                          <Button
+                            onClick={handleSubmit}
+                            disabled={submitting || Object.keys(answers).length < quiz.questions.length}
+                            size="lg"
+                            className="w-full"
+                          >
+                            {submitting ? <>
+                              <Spinner size="sm" color="white" className="mr-2" />
+                              Submitting
+                            </> : 'Submit Quiz'}
+                          </Button>
+                        </BouncyClick>
                       </CardContent>
                     </Card>
                   </div>

@@ -229,8 +229,9 @@ export interface GenerateCurriculumDto {
 }
 
 export interface GenerateQuizDto {
-  lessonContent: string;
-  learningObjectives: string[];
+  lessonId: string;
+  lessonTitle?: string;
+  additionalDetails?: string;
   difficultyLevel: 'beginner' | 'intermediate' | 'advanced';
   numberOfQuestions: number;
 }
@@ -260,6 +261,7 @@ export interface CurriculumOutput {
 }
 
 export interface QuizOutput {
+  lessonContent: string;
   questions: QuizQuestion[];
   reasoning: string;
 }
