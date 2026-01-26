@@ -9,6 +9,9 @@ A production-quality Learning Management System with AI-powered curriculum gener
 - setup.sh
 - Environment variables
 - npm run dev
+- do stuff
+- npm run build
+- npm start
 
 ## Tech Stack
 
