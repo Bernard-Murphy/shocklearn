@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { apiClient } from '@/lib/api-client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -18,7 +18,6 @@ import BouncyClick from '@/components/ui/bouncy-click';
 
 export default function QuizPage() {
   const params = useParams();
-  const router = useRouter();
   const { courseId, moduleId, lessonId, quizId } = params as any;
 
   const [quiz, setQuiz] = useState<any>(null);

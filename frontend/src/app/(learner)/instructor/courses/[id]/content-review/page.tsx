@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Check, X, Eye, FileText, Sparkles, User } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, Check, X, User } from 'lucide-react';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
@@ -16,7 +15,6 @@ import BouncyClick from '@/components/ui/bouncy-click';
 
 export default function ContentReviewPage({ params }: { params: { id: string } }) {
   const courseId = params.id;
-  const router = useRouter();
 
   const [pendingVersions, setPendingVersions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

@@ -13,8 +13,8 @@ import BouncyClick from '@/components/ui/bouncy-click';
 import { apiClient } from '@/lib/api-client';
 import { BookOpen, TrendingUp, Clock, Plus, Users, BarChart, Edit, Trash2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { fade_out, normalize, transition_fast, fade_out_scale_1, transition } from '@/lib/transitions';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { fade_out, normalize, fade_out_scale_1, transition } from '@/lib/transitions';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CreateCourseDialog } from '@/components/instructor/create-course-dialog';
 import { Sparkles } from 'lucide-react';
 

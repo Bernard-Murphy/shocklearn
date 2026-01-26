@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
-import { User, Mail, Shield, Save, Loader2 } from 'lucide-react';
+import { Mail, Shield, Save, Loader2 } from 'lucide-react';
 
 export default function ProfilePage() {
   const { user, setUser } = useAuth();

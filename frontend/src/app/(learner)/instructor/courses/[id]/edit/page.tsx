@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import {
   Card,
@@ -15,12 +14,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  BookOpen,
   Plus,
   Save,
   Trash2,
-  ChevronRight,
-  ChevronDown,
   GripVertical,
   Edit2,
   FileText,
@@ -35,7 +31,6 @@ import {
 } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
 import BouncyClick from '@/components/ui/bouncy-click';
 import Spinner from '@/components/ui/spinner';
@@ -66,8 +61,6 @@ interface Course {
 
 export default function CourseEditPage({ params }: { params: { id: string } }) {
   const courseId = params.id;
-  const router = useRouter();
-  const { user } = useAuth();
 
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);

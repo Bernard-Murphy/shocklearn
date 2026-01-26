@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,7 +16,6 @@ import { Separator } from '@/components/ui/separator';
 
 export default function LessonEditPage({ params }: { params: { id: string, lessonId: string } }) {
   const { id: courseId, lessonId } = params;
-  const router = useRouter();
 
   const [lesson, setLesson] = useState<any>(null);
   const [loading, setLoading] = useState(true);

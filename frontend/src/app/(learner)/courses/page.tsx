@@ -11,11 +11,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { BookOpen, Users, Plus, Edit, Trash2, BarChart, Sparkles } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fade_out, normalize, transition_fast, fade_out_scale_1 } from '@/lib/transitions';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/lib/auth-context';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CreateCourseDialog } from '@/components/instructor/create-course-dialog';
 import BouncyClick from '@/components/ui/bouncy-click';
-import { cn } from '@/lib/utils';
 import Spinner from '@/components/ui/spinner';
 
 interface Course {
@@ -32,7 +30,6 @@ interface Course {
 
 export default function CourseCatalogPage() {
   const router = useRouter();
-  const { user } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [instructorCourses, setInstructorCourses] = useState<Course[]>([]);
   const [enrollments, setEnrollments] = useState<any[]>([]);

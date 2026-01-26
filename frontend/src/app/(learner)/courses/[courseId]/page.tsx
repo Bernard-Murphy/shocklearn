@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { apiClient } from '@/lib/api-client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -38,7 +38,6 @@ interface Course {
 
 export default function CourseDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const courseId = params.courseId as string;
 
   const [course, setCourse] = useState<Course | null>(null);
