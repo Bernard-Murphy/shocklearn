@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/lib/auth-context';
 import BouncyClick from '@/components/ui/bouncy-click';
+import { Home } from 'lucide-react';
 import Spinner from '@/components/ui/spinner';
 
 export default function LoginPage() {
@@ -34,7 +35,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center p-4 relative">
+      <div className="absolute top-4 left-4">
+        <BouncyClick className="text-blue-500">
+          <Button asChild variant="ghost">
+            <Link href="/">
+              <Home className="w-6 h-6" />
+            </Link>
+          </Button>
+        </BouncyClick>
+      </div>
+
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Sign In</CardTitle>

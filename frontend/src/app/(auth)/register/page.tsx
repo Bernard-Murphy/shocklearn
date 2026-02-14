@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useAuth } from '@/lib/auth-context';
 import { UserRole } from '@edtech/shared';
 import BouncyClick from '@/components/ui/bouncy-click';
+import { Home } from 'lucide-react';
 import Spinner from '@/components/ui/spinner';
 
 export default function RegisterPage() {
@@ -40,7 +41,16 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center p-4 relative">
+      <div className="absolute top-4 left-4">
+        <BouncyClick className="text-blue-500">
+          <Button asChild variant="ghost">
+            <Link href="/">
+              <Home className="w-6 h-6" />
+            </Link>
+          </Button>
+        </BouncyClick>
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Create Account</CardTitle>
